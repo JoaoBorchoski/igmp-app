@@ -1,0 +1,78 @@
+name: igmp
+description: Básico
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+    sdk: ">=2.17.6 <3.0.0"
+
+dependencies:
+    flutter:
+        sdk: flutter
+    flutter_localizations:
+        sdk: flutter
+    provider:
+
+    dio:
+    csv:
+    http:
+    intl:
+    badges:
+    upgrader:
+    geolocator:
+    im_stepper:
+    file_picker:
+    flutter_map:
+    maps_toolkit:
+    url_launcher:
+    image_picker:
+    brasil_fields:
+    email_validator:
+    carousel_slider:
+    cupertino_icons:
+    easy_search_bar:
+    device_info_plus:
+    flutter_typeahead:
+    package_info_plus:
+    flutter_speed_dial:
+    shared_preferences:
+    month_picker_dialog:
+    flutter_colorpicker:
+    network_to_file_image:
+    flutter_native_splash:
+    smooth_page_indicator:
+    flutter_launcher_icons:
+    syncfusion_flutter_calendar:
+    syncfusion_flutter_datepicker:
+    cpf_cnpj_validator:
+    mobile_scanner: ^3.5.7
+
+dev_dependencies:
+    flutter_test:
+        sdk: flutter
+
+    flutter_lints: ^2.0.0
+
+flutter:
+    uses-material-design: true
+
+flutter_native_splash:
+    color: "#ffffff"
+    image: assets/images/splashRent.png
+    android: true
+    android12: true
+    ios: true
+
+    android_12:
+        image: assets/images/splashRent.png
+
+flutter_icons:
+    ios: true
+    android: "launcher_icon"
+    image_path: "assets/images/iconRent.png"
+    image_path_ios: "assets/images/rent.png"
+    remove_alpha_ios: true
+    adaptive_icon_foreground: "assets/images/iconRent.png"
+    adaptive_icon_background: "assets/images/iconRent.png"

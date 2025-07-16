@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>igmp</title>
+
+        <style>
+            body {
+                background-color: #fff;
+                color: #333;
+                font: 15px Helvetica, arial, freesans, clean, sans-serif;
+                word-wrap: break-word;
+                line-height: 1.7;
+                padding: 0 30px;
+                width: 722px;
+                -webkit-font-smoothing: antialiased;
+                margin-top: 30px;
+                margin-bottom: 30px;
+                margin-left: auto;
+                margin-right: auto;
+                border: 1px solid #d0d7de;
+                border-radius: 4px;
+            }
+
+            a {
+                color: #4183c4;
+                text-decoration: none;
+            }
+
+            a:hover {
+                text-decoration: underline;
+            }
+
+            p,
+            blockquote,
+            ul,
+            ol,
+            dl,
+            table,
+            pre {
+                margin: 15px 0;
+            }
+
+            ul,
+            ol {
+                padding-left: 30px;
+            }
+
+            h1 {
+                border-bottom: 1px solid #ddd;
+                color: #000;
+                font-size: 2.3em;
+            }
+
+            h2 {
+                border-bottom: 1px solid #eee;
+                color: #000;
+                font-size: 1.8em;
+            }
+
+            h3 {
+                font-size: 1.5em;
+            }
+
+            h4 {
+                font-size: 1.2em;
+            }
+
+            h5 {
+                font-size: 1em;
+            }
+
+            h6 {
+                color: #777;
+                font-size: 1em;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                font-weight: bold;
+                line-height: 1.7;
+                margin: 1em 0 15px 0;
+            }
+
+            h1 + p,
+            h2 + p,
+            h3 + p {
+                margin-top: 10px;
+            }
+
+            code {
+                background-color: #f6f8fa;
+                border-radius: 3px;
+                border: 1px solid #d0d7de;
+                font-family: Consolas, "Liberation Mono", Courier, monospace;
+                font-size: 12px;
+                padding: 4px;
+            }
+
+            .blocktext {
+                margin-left: auto;
+                margin-right: auto;
+                width: 800px;
+                border: 1px solid #d0d7de;
+                border-radius: 4px;
+                padding: 10px 30px 10px 30px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>igmp</h1>
+        <h2>Requisitos necessários</h2>
+        <p>
+            Para que a aplicacao possa ser executada e testada em ambiente local de desenvolvimento, alguns itens de software
+            devem estar previamente instalados.
+        </p>
+        <ul>
+            <li>Flutter, rode o comando <code>flutter doctor</code> no terminal para saber se está tudo certo.</li>
+        </ul>
+        <h2>Requisitos opcionais</h2>
+        <ul>
+            <li>Android Studio ou algum emulador do gênero.</li>
+        </ul>
+        <h2>Como executar a aplicacao</h2>
+        <ol>
+            <li>Abra seu emulador no computador.</li>
+            <li>Abra a pasta do projeto em algum terminal</li>
+            <li>
+                Caso vá utilizar alguma API, certifique-se que o endereco da API está correto no arquivo
+                <code>lib\shared\config\app_constants.dart</code>
+            </li>
+            <li>Rode o comando <code>flutter pub get</code> para baixar todas as libs.</li>
+            <li>Rode o comando <code>fluter create .</code> para criar as pastas necessárias.</li>
+            <li>
+                Rode o comando <code>flutter emulators</code> para verificar os emuladores disponíveis, se tudo ocorrer
+                corretamente o seu emulador que está aberto irá ser listado.
+            </li>
+            <li>Rode o comando <code>flutter run</code> para comecar a rodar seu código no emulador.</li>
+        </ol>
+    </body>
+</html>
