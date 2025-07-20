@@ -22,6 +22,27 @@ class PacoteRepository with ChangeNotifier {
     this._pacotes = const [],
   ]);
 
+  Future<bool> updatePacoteItem(
+    String pacoteId,
+  ) async {
+    final url =
+        '${AppConstants.apiUrl}/pacotes/confirma-carregamento/$pacoteId';
+
+    final response = await dio.get(
+      url,
+      options: Options(headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $_token'
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    }
+
+    return false;
+  }
+
   // Save
 
   Future<bool> save(

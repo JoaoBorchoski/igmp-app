@@ -12,6 +12,7 @@ import 'package:igmp/presentation/components/qr_scanner_page.dart';
 import 'package:igmp/shared/exceptions/auth_exception.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
 
 class PacoteFormPage extends StatefulWidget {
   const PacoteFormPage({super.key});
@@ -279,11 +280,7 @@ class _PacoteFormPageState extends State<PacoteFormPage> {
           confirmButtonText: 'Sim',
         );
       },
-    ).then((value) {
-      if (value) {
-        Navigator.of(context).pushReplacementNamed('/pacotes');
-      }
-    });
+    );
   }
 
   Future<void> _scanQrCode() async {
@@ -292,10 +289,27 @@ class _PacoteFormPageState extends State<PacoteFormPage> {
       MaterialPageRoute(builder: (context) => const QrScannerPage()),
     );
 
-    // {"pacoteId":"07af5f66-8f81-42fc-913d-32269ea7cea9","descricao":"asd"}
-
     if (qrCodeData != null && qrCodeData.isNotEmpty) {
-      print('QR Code lido: $qrCodeData');
+      Map<String, dynamic> qrCodeDataJson = json.decode(qrCodeData);
+      if (qrCodeDataJson['pedidoId'] == _controllers.pedidoId!.text) {
+        return showDialog(
+          context: context,
+          builder: (context) {
+            return ConfirmActionWidget(
+              message: 'Confirmar o carregamento do pacote?',
+              cancelButtonText: 'Não',
+              confirmButtonText: 'Sim',
+            );
+          },
+        ).then((value) async {
+          if (value) {
+            await Provider.of<PacoteRepository>(context, listen: false)
+                .updatePacoteItem(qrCodeDataJson['pacoteId']);
+            // ignore: use_build_context_synchronously
+            Navigator.of(context).pushReplacementNamed('/pacotes');
+          }
+        });
+      }
     } else {
       print('Nenhum QR Code lido ou operação cancelada.');
     }
