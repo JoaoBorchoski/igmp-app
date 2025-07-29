@@ -88,7 +88,7 @@ class _PacoteListPageState extends State<PacoteListPage> {
       },
       child: AppScaffold(
         title: Text('Pacotes'),
-        route: '/pacotes-form',
+        route: null,
         showDrawer: true,
         body: Center(
           child: Column(

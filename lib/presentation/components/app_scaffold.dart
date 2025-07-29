@@ -30,7 +30,8 @@ class _AppScaffoldState extends State<AppScaffold> {
   @override
   Widget build(BuildContext context) {
     return UpgradeAlert(
-      upgrader: Upgrader(durationUntilAlertAgain: const Duration(microseconds: 1),
+      upgrader: Upgrader(
+        durationUntilAlertAgain: const Duration(microseconds: 1),
         canDismissDialog: false,
         showIgnore: false,
         showLater: false,
@@ -38,7 +39,10 @@ class _AppScaffoldState extends State<AppScaffold> {
         appcastConfig: appcastConfig,
       ),
       child: Scaffold(
-        appBar: AppBar(leading: !widget.showDrawer ? BackButton(color: AppColors.background) : null,
+        appBar: AppBar(
+          leading: !widget.showDrawer
+              ? BackButton(color: AppColors.background)
+              : null,
           title: widget.title,
           backgroundColor: AppColors.primary,
           actions: widget.actions,
@@ -47,8 +51,10 @@ class _AppScaffoldState extends State<AppScaffold> {
         drawer: widget.showDrawer ? AppDrawer() : null,
         floatingActionButton: widget.route == null
             ? null
-            : FloatingActionButton(onPressed: () {
-                  Navigator.of(context).pushReplacementNamed(widget.route!, arguments: widget.args);
+            : FloatingActionButton(
+                onPressed: () {
+                  Navigator.of(context).pushReplacementNamed(widget.route!,
+                      arguments: widget.args);
                 },
                 backgroundColor: AppColors.secondDegrade,
                 child: const Icon(Icons.add),

@@ -141,15 +141,22 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
     );
   }
 
-  // Logo
-
   Widget get buildFormLogo {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
       child: SizedBox(
         width: 250,
         height: 60,
-        child: Image.asset(AppImages.signInLogo),
+        child: Center(
+          child: Text(
+            'IGMP',
+            style: TextStyle(
+              fontSize: 50,
+              color: Colors.orange.shade800,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -212,10 +219,16 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
     return Padding(
       padding: const EdgeInsets.only(top: 25.0),
       child: Opacity(
-        opacity: 0.2,
+        opacity: 0.75,
         child: SizedBox(
-          width: 110,
-          child: Image.asset(AppImages.companyLogo),
+          child: Text(
+            'Apex Innovations',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.blue.shade400,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
     );
