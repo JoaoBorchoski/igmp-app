@@ -32,15 +32,28 @@ class _PacoteFormPageState extends State<PacoteFormPage> {
     pedidoSequencial: TextEditingController(),
     descricao: TextEditingController(),
   );
+  final _itemsScrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _itemsScrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    print('DEBUG: PacoteFormPage build chamado.');
     final args = ModalRoute.of(context)!.settings.arguments as dynamic;
     if (args != null && !_dataIsLoaded) {
+      print('DEBUG: Args recebidos: $args');
       _controllers.id!.text = args['id'] ?? '';
       _loadData(_controllers.id!.text);
       _isViewPage = args['view'] ?? false;
       _dataIsLoaded = true;
+    } else if (_dataIsLoaded) {
+      print('DEBUG: Dados já carregados. _dataIsLoaded: $_dataIsLoaded');
+    } else {
+      print('DEBUG: Args nulos ou _dataIsLoaded já true.');
     }
 
     return WillPopScope(
@@ -74,24 +87,24 @@ class _PacoteFormPageState extends State<PacoteFormPage> {
   }
 
   Widget formFields(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _pedidoIdField,
-            _descricaoField,
-            _cameraButtons,
-            const SizedBox(height: 20),
-            Expanded(
-              child: _itemsTable,
-            ),
-            const SizedBox(height: 20),
-            _actionButtons,
-          ],
+    return SingleChildScrollView(
+      child: Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _pedidoIdField,
+              // _descricaoField,
+              _cameraButtons,
+              const SizedBox(height: 20),
+              _itemsTable,
+              const SizedBox(height: 20),
+              _actionButtons,
+            ],
+          ),
         ),
       ),
     );
@@ -115,7 +128,7 @@ class _PacoteFormPageState extends State<PacoteFormPage> {
     return FormTextInput(
       label: 'Descricao',
       isDisabled: true,
-      controller: _controllers.descricao!,
+      controller: _controllers.descricao ?? TextEditingController(),
     );
   }
 
@@ -124,15 +137,18 @@ class _PacoteFormPageState extends State<PacoteFormPage> {
         ? const SizedBox.shrink()
         : Row(
             children: [
-              Expanded(
-                  child: AppFormButton(submit: _cancel, label: 'Cancelar')),
+              AppFormButton(submit: _cancel, label: 'Cancelar'),
               const SizedBox(width: 10),
-              Expanded(child: AppFormButton(submit: _submit, label: 'Salvar')),
+              AppFormButton(submit: _submit, label: 'Salvar'),
             ],
           );
   }
 
   Widget get _itemsTable {
+    print('DEBUG: _itemsTable está sendo construído.');
+    print(
+        'DEBUG: _controllers.items possui ${_controllers.items?.length ?? 0} itens.');
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -140,11 +156,12 @@ class _PacoteFormPageState extends State<PacoteFormPage> {
           'Items do Pacote',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 16), // Espaçamento vertical
-
-        Expanded(
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 200,
           child: Scrollbar(
             thumbVisibility: true,
+            controller: _itemsScrollController,
             child: ListView.builder(
               itemCount: _controllers.items?.length ?? 0,
               itemBuilder: (context, index) {
@@ -180,7 +197,6 @@ class _PacoteFormPageState extends State<PacoteFormPage> {
 
   Widget get _cameraButtons {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Expanded(
           child: AppFormButton(
@@ -202,18 +218,34 @@ class _PacoteFormPageState extends State<PacoteFormPage> {
   // Functions
 
   Future<void> _loadData(String id) async {
-    await Provider.of<PacoteRepository>(context, listen: false)
-        .get(id)
-        .then((pacote) => _populateController(pacote));
+    print('DEBUG: _loadData chamado com id: $id');
+    try {
+      await Provider.of<PacoteRepository>(context, listen: false)
+          .get(id)
+          .then((pacote) {
+        print('DEBUG: Pacote retornado do repo: $pacote');
+        print('DEBUG: Pacote retornado do repo: ${pacote.descricao}');
+        print('DEBUG: Pacote retornado do repo: ${pacote.id}');
+        print('DEBUG: Pacote retornado do repo: ${pacote.pedidoId}');
+        print('DEBUG: Pacote retornado do repo: ${pacote.items}');
+        print('DEBUG: Pacote retornado do repo: ${pacote.sequencial}');
+        _populateController(pacote);
+      });
+    } catch (e) {
+      print('ERRO: Falha ao carregar dados do pacote: $e');
+    }
   }
 
   Future<void> _populateController(Pacote pacote) async {
+    print('DEBUG: _populateController chamado com pacote: ${pacote.id}');
     setState(() {
       _controllers.id!.text = pacote.id ?? '';
       _controllers.pedidoId!.text = pacote.pedidoId ?? '';
       _controllers.pedidoSequencial!.text = pacote.pedidoLabel ?? '';
       _controllers.descricao!.text = pacote.descricao ?? '';
       _controllers.items = pacote.items ?? [];
+      print(
+          'DEBUG: Total de items carregados: ${_controllers.items?.length ?? 0}');
     });
   }
 
