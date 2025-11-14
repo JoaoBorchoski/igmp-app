@@ -23,7 +23,11 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         title: 'igmp',
         theme: AppThemes.mainTheme,
-        localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
         supportedLocales: const [Locale('pt')],
         routes: appRoutes,
         initialRoute: '/',

@@ -5,11 +5,14 @@ import 'package:igmp/domain/models/operacao/pacote_item.dart';
 import 'package:igmp/domain/models/shared/suggestion_select.dart';
 import 'package:igmp/shared/config/app_constants.dart';
 import 'package:igmp/domain/models/operacao/pacote.dart';
+import 'package:igmp/domain/models/operacao/espelho_carga.dart';
+import 'package:igmp/domain/models/operacao/espelho_carga_item.dart';
 
 class PacoteRepository with ChangeNotifier {
   final dio = Dio();
   final String _token;
   final List<Pacote> _pacotes;
+  final List<EspelhoCarga> _espelhosCarga;
 
   List<Pacote> get items => [..._pacotes];
 
@@ -19,28 +22,36 @@ class PacoteRepository with ChangeNotifier {
 
   PacoteRepository([
     this._token = '',
-    this._pacotes = const [],
-  ]);
+    List<Pacote>? pacotes,
+    List<EspelhoCarga>? espelhosCarga,
+  ])  : _pacotes = pacotes ?? [],
+        _espelhosCarga = espelhosCarga ?? [];
 
   Future<bool> updatePacoteItem(
     String pacoteId,
+    String espelhoCargaId,
   ) async {
-    final url =
-        '${AppConstants.apiUrl}/pacotes/confirma-carregamento/$pacoteId';
+    try {
+      final url =
+          '${AppConstants.apiUrl}/pacotes/confirma-carregamento/$pacoteId/$espelhoCargaId';
 
-    final response = await dio.get(
-      url,
-      options: Options(headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $_token'
-      }),
-    );
+      final response = await dio.get(
+        url,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $_token'
+        }),
+      );
 
-    if (response.statusCode == 200) {
-      return true;
+      if (response.statusCode == 200) {
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      print('Erro ao atualizar item do pacote: $e');
+      return false;
     }
-
-    return false;
   }
 
   // Save
@@ -160,6 +171,32 @@ class PacoteRepository with ChangeNotifier {
     return pacote;
   }
 
+  Future<EspelhoCarga> getEspelhoCarga(String id) async {
+    EspelhoCarga espelhoCarga = EspelhoCarga();
+    final url = '${AppConstants.apiUrl}/espelhos-carga/$id';
+    final response = await dio.get(url,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $_token'
+        }));
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> data = response.data;
+      espelhoCarga.id = id;
+      espelhoCarga.pedidoId = data['pedidoId'];
+      espelhoCarga.placa = data['placa'];
+      espelhoCarga.motorista = data['motorista'];
+      espelhoCarga.lote = data['lote'];
+      espelhoCarga.descricao = data['descricao'];
+      espelhoCarga.espelhoCargaItems = data['espelhoCargaItems'] != null
+          ? (data['espelhoCargaItems'] as List)
+              .map((item) => EspelhoCargaItem.fromJson(item))
+              .toList()
+          : null;
+    }
+
+    return espelhoCarga;
+  }
   // select
 
   Future<List<Map<String, String>>> select(String search) async {
@@ -221,5 +258,57 @@ class PacoteRepository with ChangeNotifier {
     }
 
     return 'Item nao encontrado';
+  }
+
+  // list espelhos carga
+
+  Future<List<EspelhoCarga>> listEspelhosCarga(
+    String? search,
+    int? rowsPerPage,
+    int? page,
+    List? columnOrder,
+  ) async {
+    _espelhosCarga.clear();
+    final Map<String, dynamic> data = {
+      'search': search,
+      'pageSize': rowsPerPage,
+      'page': page,
+      'columnOrder': columnOrder,
+    };
+    const url = '${AppConstants.apiUrl}/espelhos-carga/list';
+
+    final response = await dio.post(
+      url,
+      data: data,
+      options: Options(headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $_token'
+      }),
+    );
+
+    List dataList = response.data['items'];
+
+    List<EspelhoCarga> espelhoCargaList = dataList
+        .map(
+          (e) => EspelhoCarga(
+            id: e['id'],
+            pedidoId: e['pedidoId'],
+            placa: e['placa'],
+            motorista: e['motorista'],
+            lote: e['lote'],
+            descricao: e['descricao'],
+            createdAt:
+                e['createdAt'] != null ? DateTime.parse(e['createdAt']) : null,
+            updatedAt:
+                e['updatedAt'] != null ? DateTime.parse(e['updatedAt']) : null,
+          ),
+        )
+        .toList();
+
+    _espelhosCarga.addAll(espelhoCargaList);
+
+    notifyListeners();
+
+    return espelhoCargaList;
   }
 }

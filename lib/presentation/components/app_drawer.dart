@@ -91,7 +91,7 @@ class AppDrawerState extends State<AppDrawer> {
                 accountName: Text(nome),
                 accountEmail: Text(email),
               ),
-              Flexible(
+              Expanded(
                 child: ListView.builder(
                   padding: EdgeInsets.only(top: 0),
                   itemCount: menu.length,

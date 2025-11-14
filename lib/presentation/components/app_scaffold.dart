@@ -29,37 +29,27 @@ class _AppScaffoldState extends State<AppScaffold> {
   final appcastConfig = AppcastConfiguration(supportedOS: ['android', 'ios']);
   @override
   Widget build(BuildContext context) {
-    return UpgradeAlert(
-      upgrader: Upgrader(
-        durationUntilAlertAgain: const Duration(microseconds: 1),
-        canDismissDialog: false,
-        showIgnore: false,
-        showLater: false,
-        languageCode: 'pt',
-        appcastConfig: appcastConfig,
+    print('DEBUG: AppScaffold build chamado');
+    return Scaffold(
+      appBar: AppBar(
+        leading:
+            !widget.showDrawer ? BackButton(color: AppColors.background) : null,
+        title: widget.title,
+        backgroundColor: AppColors.primary,
+        actions: widget.actions,
       ),
-      child: Scaffold(
-        appBar: AppBar(
-          leading: !widget.showDrawer
-              ? BackButton(color: AppColors.background)
-              : null,
-          title: widget.title,
-          backgroundColor: AppColors.primary,
-          actions: widget.actions,
-        ),
-        body: widget.body,
-        drawer: widget.showDrawer ? AppDrawer() : null,
-        floatingActionButton: widget.route == null
-            ? null
-            : FloatingActionButton(
-                onPressed: () {
-                  Navigator.of(context).pushReplacementNamed(widget.route!,
-                      arguments: widget.args);
-                },
-                backgroundColor: AppColors.secondDegrade,
-                child: const Icon(Icons.add),
-              ),
-      ),
+      body: widget.body,
+      drawer: widget.showDrawer ? AppDrawer() : null,
+      floatingActionButton: widget.route == null
+          ? null
+          : FloatingActionButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed(widget.route!,
+                    arguments: widget.args);
+              },
+              backgroundColor: AppColors.secondDegrade,
+              child: const Icon(Icons.add),
+            ),
     );
   }
 }
